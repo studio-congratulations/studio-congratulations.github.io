@@ -109,7 +109,7 @@
             {
                 title: "Data Visualisation",
                 category: "youtube",
-                thumbnail: "https://img.youtube.com/vi/n4pX57YfFkM/maxresdefault.jpg", 
+                thumbnail: "https://img.youtube.com/vi/n4pX57YfFkM/0.jpg", /* <-- FIX #1: Correct thumbnail URL */
                 videoUrl: "n4pX57YfFkM", 
                 isYouTube: true
             },
@@ -172,7 +172,7 @@
             modal.classList.remove('hidden');
 
             if (project.isYouTube) {
-                // FIXED: Using correct embed URL with autoplay and mute
+                // <-- FIX #2: Correctly constructed the YouTube embed URL
                 content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else {
                 content.innerHTML = `<video src="${project.videoUrl}" controls autoplay class="w-full h-full"></video>`;
