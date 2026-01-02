@@ -13,6 +13,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #0a0a0a;
             color: #ffffff;
+            scroll-behavior: smooth;
         }
 
         .filter-btn.active {
@@ -21,7 +22,7 @@
         }
 
         .project-card {
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .glass {
@@ -30,14 +31,14 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Video hover effect */
-        .video-container video {
+        /* Hover effect: Only hide image if there is a local video to play */
+        .has-video:hover img {
             display: none;
         }
-        .video-container:hover img {
+        .video-preview {
             display: none;
         }
-        .video-container:hover video {
+        .has-video:hover .video-preview {
             display: block;
         }
     </style>
@@ -50,7 +51,7 @@
         <div class="space-x-6 hidden md:flex text-sm uppercase tracking-widest">
             <a href="#work" class="hover:text-gray-400 transition">Work</a>
             <a href="#about" class="hover:text-gray-400 transition">About</a>
-            <a href="mailto:your-email@gmail.com" class="hover:text-gray-400 transition">Contact</a>
+            <a href="mailto:studio.congratulations@gmail.com" class="hover:text-gray-400 transition">Contact</a>
         </div>
     </nav>
 
@@ -58,7 +59,7 @@
     <section class="h-screen flex flex-col justify-center items-center text-center px-4">
         <h2 class="text-6xl md:text-8xl font-bold mb-4 tracking-tighter italic">CREATIVE<br>PORTFOLIO</h2>
         <p class="text-gray-400 max-w-lg mx-auto uppercase tracking-widest text-xs">
-            3D Rendering • ComfyUI Workflows • Character Animation • Motion Design
+            3D Rendering • ComfyUI Workflows • Character Animation • Data Visualisation
         </p>
         <div class="mt-12 animate-bounce">
             <i data-lucide="chevron-down"></i>
@@ -88,27 +89,26 @@
         <p class="text-gray-500 mb-4 tracking-widest text-xs">© 2026 STUDIO CONGRATULATIONS</p>
         <div class="flex justify-center space-x-6">
             <a href="#"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-            <a href="#"><i data-lucide="youtube" class="w-5 h-5"></i></a>
+            <a href="https://youtube.com/@studiocongratulations"><i data-lucide="youtube" class="w-5 h-5"></i></a>
             <a href="#"><i data-lucide="github" class="w-5 h-5"></i></a>
         </div>
     </footer>
 
-    <!-- Overlay/Modal for Video Playback -->
+    <!-- Video Modal -->
     <div id="video-modal" class="fixed inset-0 bg-black/95 z-[60] hidden flex items-center justify-center p-4">
-        <button onclick="closeModal()" class="absolute top-10 right-10 text-white hover:text-gray-400 transition"><i data-lucide="x" class="w-8 h-8"></i></button>
-        <div id="modal-content" class="w-full max-w-5xl aspect-video">
-            <!-- YouTube or Video tag injected here -->
+        <button onclick="closeModal()" class="absolute top-6 right-6 text-white hover:text-gray-400 transition">
+            <i data-lucide="x" class="w-10 h-10"></i>
+        </button>
+        <div id="modal-content" class="w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden">
+            <!-- YouTube/Video will load here -->
         </div>
     </div>
 
     <script>
-        // PROJECT DATA
-        // Types: '3d', 'animation', 'comfyui', 'youtube'
         const projects = [
             {
                 title: "Australian Brand Growth",
                 category: "youtube",
-                // This uses the official YouTube thumbnail for your specific video
                 thumbnail: "https://img.youtube.com/vi/n4pX57YfFkM/maxresdefault.jpg", 
                 videoUrl: "n4pX57YfFkM", 
                 isYouTube: true
@@ -121,7 +121,7 @@
                 isYouTube: false
             },
             {
-                title: "ComfyUI Workflow: Neural Style",
+                title: "ComfyUI Neural Style",
                 category: "comfyui",
                 thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800",
                 videoUrl: "y6120QYOtw8", 
@@ -142,22 +142,23 @@
 
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
-            filtered.forEach((project, index) => {
+            filtered.forEach((project) => {
                 const card = document.createElement('div');
-                card.className = 'project-card glass overflow-hidden cursor-pointer group';
+                // Added "has-video" class only if it's a local video for the hover effect
+                card.className = `project-card glass overflow-hidden cursor-pointer group ${!project.isYouTube ? 'has-video' : ''}`;
                 card.onclick = () => openModal(project);
                 
                 card.innerHTML = `
-                    <div class="video-container relative aspect-video overflow-hidden">
-                        <img src="${project.thumbnail}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
-                        ${!project.isYouTube ? `<video src="${project.videoUrl}" loop muted playsinline class="w-full h-full object-cover"></video>` : ''}
+                    <div class="relative aspect-video overflow-hidden bg-black">
+                        <img src="${project.thumbnail}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        ${!project.isYouTube ? `<video src="${project.videoUrl}" loop muted playsinline class="video-preview w-full h-full object-cover"></video>` : ''}
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <i data-lucide="play" class="fill-white text-white w-12 h-12"></i>
+                            <i data-lucide="play" class="text-white w-12 h-12 fill-white"></i>
                         </div>
                     </div>
                     <div class="p-4 flex justify-between items-center">
-                        <h3 class="text-sm font-medium uppercase tracking-wider">${project.title}</h3>
-                        <span class="text-[10px] text-gray-500 border border-white/20 px-2 py-1 rounded">${project.category}</span>
+                        <h3 class="text-xs font-bold uppercase tracking-widest">${project.title}</h3>
+                        <span class="text-[9px] text-gray-500 border border-white/10 px-2 py-1 rounded-full uppercase">${project.category}</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -171,8 +172,8 @@
             modal.classList.remove('hidden');
 
             if (project.isYouTube) {
-                // Fixed the URL interpolation here
-                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                // FIXED: Using correct embed URL with autoplay and mute
+                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else {
                 content.innerHTML = `<video src="${project.videoUrl}" controls autoplay class="w-full h-full"></video>`;
             }
