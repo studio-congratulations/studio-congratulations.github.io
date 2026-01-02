@@ -85,7 +85,7 @@
 
     <!-- Footer -->
     <footer id="about" class="py-20 px-6 border-t border-white/10 text-center">
-        <p class="text-gray-500 mb-4 tracking-widest text-xs">© 2024 STUDIO CONGRATULATIONS</p>
+        <p class="text-gray-500 mb-4 tracking-widest text-xs">© 2026 STUDIO CONGRATULATIONS</p>
         <div class="flex justify-center space-x-6">
             <a href="#"><i data-lucide="instagram" class="w-5 h-5"></i></a>
             <a href="#"><i data-lucide="youtube" class="w-5 h-5"></i></a>
@@ -95,7 +95,7 @@
 
     <!-- Overlay/Modal for Video Playback -->
     <div id="video-modal" class="fixed inset-0 bg-black/95 z-[60] hidden flex items-center justify-center p-4">
-        <button onclick="closeModal()" class="absolute top-10 right-10 text-white"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <button onclick="closeModal()" class="absolute top-10 right-10 text-white hover:text-gray-400 transition"><i data-lucide="x" class="w-8 h-8"></i></button>
         <div id="modal-content" class="w-full max-w-5xl aspect-video">
             <!-- YouTube or Video tag injected here -->
         </div>
@@ -106,17 +106,25 @@
         // Types: '3d', 'animation', 'comfyui', 'youtube'
         const projects = [
             {
+                title: "Australian Brand Growth",
+                category: "youtube",
+                // This uses the official YouTube thumbnail for your specific video
+                thumbnail: "https://img.youtube.com/vi/n4pX57YfFkM/maxresdefault.jpg", 
+                videoUrl: "n4pX57YfFkM", 
+                isYouTube: true
+            },
+            {
                 title: "Cybernetic Evolution",
                 category: "3d",
                 thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800",
-                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Replace with your MP4 link
+                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", 
                 isYouTube: false
             },
             {
                 title: "ComfyUI Workflow: Neural Style",
                 category: "comfyui",
                 thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800",
-                videoUrl: "y6120QYOtw8", // YouTube ID
+                videoUrl: "y6120QYOtw8", 
                 isYouTube: true
             },
             {
@@ -125,8 +133,7 @@
                 thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800",
                 videoUrl: "https://www.w3schools.com/html/movie.mp4",
                 isYouTube: false
-            },
-            // Add more projects here
+            }
         ];
 
         function renderProjects(filter = 'all') {
@@ -145,7 +152,7 @@
                         <img src="${project.thumbnail}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
                         ${!project.isYouTube ? `<video src="${project.videoUrl}" loop muted playsinline class="w-full h-full object-cover"></video>` : ''}
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                            <i data-lucide="play" class="fill-white"></i>
+                            <i data-lucide="play" class="fill-white text-white w-12 h-12"></i>
                         </div>
                     </div>
                     <div class="p-4 flex justify-between items-center">
@@ -164,7 +171,8 @@
             modal.classList.remove('hidden');
 
             if (project.isYouTube) {
-                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+                // Fixed the URL interpolation here
+                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else {
                 content.innerHTML = `<video src="${project.videoUrl}" controls autoplay class="w-full h-full"></video>`;
             }
