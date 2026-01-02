@@ -109,8 +109,9 @@
             {
                 title: "Data Visualisation",
                 category: "youtube",
-                thumbnail: "https://img.youtube.com/vi/n4pX57YfFkM/0.jpg", /* <-- FIX #1: Correct thumbnail URL */
-                videoUrl: "n4pX57YfFkM", 
+                /* UPDATED: Using your specific ID: D28om1J48L0 */
+                thumbnail: "https://img.youtube.com/vi/D28om1J48L0/maxresdefault.jpg", 
+                videoUrl: "D28om1J48L0", 
                 isYouTube: true
             },
             {
@@ -124,7 +125,7 @@
                 title: "ComfyUI",
                 category: "comfyui",
                 thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800",
-                videoUrl: "y6120QYOtw8", 
+                videoUrl: "M7fi_IB5398", 
                 isYouTube: true
             },
             {
@@ -144,7 +145,6 @@
 
             filtered.forEach((project) => {
                 const card = document.createElement('div');
-                // Added "has-video" class only if it's a local video for the hover effect
                 card.className = `project-card glass overflow-hidden cursor-pointer group ${!project.isYouTube ? 'has-video' : ''}`;
                 card.onclick = () => openModal(project);
                 
@@ -172,7 +172,7 @@
             modal.classList.remove('hidden');
 
             if (project.isYouTube) {
-                // <-- FIX #2: Correctly constructed the YouTube embed URL
+                // This constructs the full embed URL using the ID "D28om1J48L0"
                 content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             } else {
                 content.innerHTML = `<video src="${project.videoUrl}" controls autoplay class="w-full h-full"></video>`;
