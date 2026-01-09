@@ -30,17 +30,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        /* Hover effect: Only hide image if there is a local video to play */
-        .has-video:hover img {
-            display: none;
-        }
-        .video-preview {
-            display: none;
-        }
-        .has-video:hover .video-preview {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -72,10 +61,8 @@
         <!-- Filter Bar -->
         <div class="flex flex-wrap gap-4 mb-12 justify-center">
             <button onclick="filterProjects('all')" class="filter-btn active px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">All</button>
-            <button onclick="filterProjects('3d')" class="filter-btn px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">3D Work</button>
-            <button onclick="filterProjects('animation')" class="filter-btn px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">Animation</button>
-            <button onclick="filterProjects('comfyui')" class="filter-btn px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">ComfyUI</button>
             <button onclick="filterProjects('youtube')" class="filter-btn px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">YouTube</button>
+            <button onclick="filterProjects('comfyui')" class="filter-btn px-6 py-2 rounded-full border border-white/20 text-sm uppercase transition">ComfyUI</button>
         </div>
 
         <!-- Project Grid -->
@@ -105,35 +92,25 @@
     </div>
 
     <script>
+        // Updated Data: Only YouTube videos now
         const projects = [
+            {
+                title: "New Visuals",
+                category: "youtube",
+                videoUrl: "WuShF4IkT5k", // <-- NEW VIDEO ADDED HERE
+                isYouTube: true
+            },
             {
                 title: "Data Visualisation",
                 category: "youtube",
-                /* UPDATED: Using your specific ID: D28om1J48L0 */
-                thumbnail: "https://img.youtube.com/vi/D28om1J48L0/maxresdefault.jpg", 
                 videoUrl: "D28om1J48L0", 
                 isYouTube: true
             },
             {
-                title: "3D",
-                category: "3d",
-                thumbnail: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800",
-                videoUrl: "https://www.w3schools.com/html/mov_bbb.mp4", 
-                isYouTube: false
-            },
-            {
-                title: "ComfyUI",
+                title: "ComfyUI Workflow",
                 category: "comfyui",
-                thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800",
                 videoUrl: "M7fi_IB5398", 
                 isYouTube: true
-            },
-            {
-                title: "Python",
-                category: "animation",
-                thumbnail: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800",
-                videoUrl: "https://www.w3schools.com/html/movie.mp4",
-                isYouTube: false
             }
         ];
 
@@ -144,14 +121,16 @@
             const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
 
             filtered.forEach((project) => {
+                // Automatically get high-res thumbnail from YouTube ID
+                const thumbUrl = `https://img.youtube.com/vi/${project.videoUrl}/maxresdefault.jpg`;
+
                 const card = document.createElement('div');
-                card.className = `project-card glass overflow-hidden cursor-pointer group ${!project.isYouTube ? 'has-video' : ''}`;
+                card.className = `project-card glass overflow-hidden cursor-pointer group`;
                 card.onclick = () => openModal(project);
                 
                 card.innerHTML = `
                     <div class="relative aspect-video overflow-hidden bg-black">
-                        <img src="${project.thumbnail}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
-                        ${!project.isYouTube ? `<video src="${project.videoUrl}" loop muted playsinline class="video-preview w-full h-full object-cover"></video>` : ''}
+                        <img src="${thumbUrl}" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
                             <i data-lucide="play" class="text-white w-12 h-12 fill-white"></i>
                         </div>
@@ -172,10 +151,7 @@
             modal.classList.remove('hidden');
 
             if (project.isYouTube) {
-                // This constructs the full embed URL using the ID "D28om1J48L0"
-                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1&mute=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            } else {
-                content.innerHTML = `<video src="${project.videoUrl}" controls autoplay class="w-full h-full"></video>`;
+                content.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.videoUrl}?autoplay=1&mute=0&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
             }
         }
 
